@@ -1,11 +1,13 @@
 package de.craftlancer.speedroads;
 
+import java.math.MathContext;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -23,10 +25,10 @@ public class SpeedRoadsTask extends BukkitRunnable {
     private static final AttributeModifier EMPTY_MODIFIER = new AttributeModifier(MODIFIER_UUID, MODIFIER_NAME, 0, Operation.ADD_SCALAR);
     private final SpeedRoads plugin;
     
-    private Map<UUID, Double> currentSpeedMap = new HashMap<>();
-    private Map<UUID, Double> targetSpeedMap = new HashMap<>();
+    private final Map<UUID, Double> currentSpeedMap = new HashMap<>();
+    private final Map<UUID, Double> targetSpeedMap = new HashMap<>();
     
-    private Map<World, Collection<Entity>> affectedEntitiesMap = new HashMap<>();
+    private final Map<World, Collection<Entity>> affectedEntitiesMap = new HashMap<>();
     private long tickCounter = 0;
     
     public SpeedRoadsTask(SpeedRoads plugin) {
@@ -72,8 +74,10 @@ public class SpeedRoadsTask extends BukkitRunnable {
         // distribute updated entities roughly evenly across the ticks
         if(tickCounter % UPDATE_ON_ROAD_DIVIDER == a.getEntityId() % UPDATE_ON_ROAD_DIVIDER) {
             double targetSpeedMod = Double.NEGATIVE_INFINITY;
+            Location location = a.getLocation().clone();
+            location.setY(Math.round(location.getY()));
             for (Road r : plugin.getRoads())
-                if (r.getSpeedMod() > targetSpeedMod && r.isRoadBlock(a.getLocation().getBlock()))
+                if (r.getSpeedMod() > targetSpeedMod && r.isRoadBlock(location.getBlock()))
                     targetSpeedMod = r.getSpeedMod();
             
             if (targetSpeedMod == Double.NEGATIVE_INFINITY)

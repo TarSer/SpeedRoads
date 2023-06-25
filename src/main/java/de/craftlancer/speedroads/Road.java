@@ -1,18 +1,18 @@
 package de.craftlancer.speedroads;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
 public class Road {
     private double speed;
-    private List<BlockData> blockData = new ArrayList<>();
+    private final List<BlockData> blockData = new ArrayList<>();
     
     public Road(ConfigurationSection config, Logger log) {
         this.speed = config.getDouble("speed", 0.2D);
@@ -58,8 +58,8 @@ public class Road {
         for (int i = 0; i < blockData.size(); i++) {
             if (blockData.get(i) == null)
                 continue;
-            
-            if (!block.getRelative(0, -i, 0).getBlockData().matches(blockData.get(i)))
+            if (!block.getRelative(0, -i-1, 0).getBlockData().matches(blockData.get(i)))
+
                 return false;
         }
         

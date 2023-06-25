@@ -1,5 +1,8 @@
-/bin
-/.classpath
-/.project
-/.settings
-/target
+/bin/
+/.gradle/
+/.settings/
+/doc/
+/target/
+/.idea/
+build
+RPGRegions.iml
